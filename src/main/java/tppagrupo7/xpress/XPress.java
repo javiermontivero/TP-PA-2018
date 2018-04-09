@@ -1,4 +1,4 @@
-package TPPAGRUPO7.XPress;
+package tppagrupo7.xpress;
 
 public class XPress {
 
