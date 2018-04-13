@@ -7,9 +7,10 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Id {
-	int IDENTITY=0;
-	int ASSIGNED=1;
-
-	int strategy();
+public @interface ManyToOne {
+	int LAZY=1;
+	int EAGER=2;
+	
+	String columnName() default "";
+	int fetchType() default EAGER; 
 }
