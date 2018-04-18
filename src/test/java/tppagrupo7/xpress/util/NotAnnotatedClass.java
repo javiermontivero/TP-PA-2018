@@ -2,6 +2,6 @@ package tppagrupo7.xpress.util;
 
 import tppagrupo7.xpress.annotation.Table;
 
-@Table(name="name")
+@Table(name="NotAnnotatedClass")
 public class NotAnnotatedClass {
 }

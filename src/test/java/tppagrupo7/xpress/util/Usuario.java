@@ -6,7 +6,7 @@ import tppagrupo7.xpress.annotation.Table;
 
 @Table(name = "Usuario")
 public class Usuario {
-    @Id
+    @Id(strategy = Id.IDENTITY)
     @Column
     private int id;
 }

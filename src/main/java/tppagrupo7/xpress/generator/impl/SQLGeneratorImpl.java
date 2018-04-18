@@ -18,16 +18,20 @@ public class SQLGeneratorImpl implements SQLGenerator {
         List<Field> fields = Arrays.asList(clazz.getDeclaredFields());
 
         Optional<Field> idFieldName = fields.stream().filter(field -> field.getAnnotation(Id.class) != null ).findFirst();
-        Table className = clazz.getAnnotation(Table.class);
-        if(className == null){
+        if(!clazz.isAnnotationPresent(Table.class)){
             throw new RuntimeException("Cannot find id table name in class " + clazz.getSimpleName() + ".");
         }
         if(idFieldName.isPresent())
-            return select + clazz.getSimpleName() + where + idFieldName.get().getName() + " = " + id;
+            return select + clazz.getSimpleName() + where + idFieldName.get().getName() + " = " + id + ";";
         else{
             throw new RuntimeException("Cannot find id field in class " + clazz.getSimpleName() + ".");
         }
+    }
 
+    @Override
+    public <T> String selectAll(Class<T> clazz) {
+        String tabla = clazz.getAnnotation(Table.class).name();
+        return select + tabla + ";";
     }
 
 }
