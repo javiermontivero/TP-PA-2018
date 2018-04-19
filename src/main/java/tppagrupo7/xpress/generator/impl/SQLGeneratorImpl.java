@@ -10,14 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class SQLGeneratorImpl implements SQLGenerator {
-    private String select = "Select * from ";
-    private String where = " where ";
-
+    private String select = "SELECT * FROM ";
+    private String where = " WHERE ";
 
     public <T> String selectById(Class<T> clazz, int id) {
         List<Field> fields = Arrays.asList(clazz.getDeclaredFields());
 
-        Optional<Field> idFieldName = fields.stream().filter(field -> field.getAnnotation(Id.class) != null ).findFirst();
+        Optional<Field> idFieldName = fields.stream().filter(field -> field.isAnnotationPresent(Id.class)).findFirst();
         if(!clazz.isAnnotationPresent(Table.class)){
             throw new RuntimeException("Cannot find id table name in class " + clazz.getSimpleName() + ".");
         }
