@@ -10,10 +10,10 @@ public class RolAplicacion {
     @Column
     private int idRolAplicacion;
     
-    @ManyToOne
+    @OneToMany
     private Rol rol;
     
-    @Column
+    @OneToMany
     private Aplicacion aplicacion;
     
     public RolAplicacion(){

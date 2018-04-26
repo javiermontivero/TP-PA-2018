@@ -29,4 +29,14 @@ public class SQLGeneratorImplTest {
             Assert.assertEquals("Cannot find id field in class NotAnnotatedClass.",e.getMessage());
         }
     }
+    
+    public static void main(){
+    	//recuperar 1 usuario
+    	Usuario usr = Xpress.find(Usuario.class,1);
+    	
+    	//recuperar varios usuarios
+    	List<Usuario> usr_lst = Xpress.findAll(Usuario.class);
+    	
+    	
+    }
 }

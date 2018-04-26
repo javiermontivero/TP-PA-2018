@@ -13,8 +13,9 @@ public class Aplicacion {
     @Column 
     private String descripcion;
     
+    /*
     @OneToMany(mappedBy="APLICACION")
-    private List<RolAplicacion> roles; 
+    private List<RolAplicacion> roles;*/ 
     
     public Aplicacion(){
     }

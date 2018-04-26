@@ -32,5 +32,4 @@ public class SQLGeneratorImpl implements SQLGenerator {
         String tabla = clazz.getAnnotation(Table.class).name();
         return select + tabla + ";";
     }
-
 }
