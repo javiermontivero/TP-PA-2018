@@ -1,16 +1,15 @@
 package tppagrupo7.xpress.util;
 
-import tppagrupo7.xpress.annotation.Column;
-import tppagrupo7.xpress.annotation.Id;
-import tppagrupo7.xpress.annotation.Table;
+import tppagrupo7.xpress.annotation.*;
 
+import java.util.List;
 
 
 @Table(name = "USUARIO")
 public class Usuario {
     @Id(strategy = Id.IDENTITY)
     @Column
-    private int idUsuario;
+    private int id;
     
     @Column
     private String username;

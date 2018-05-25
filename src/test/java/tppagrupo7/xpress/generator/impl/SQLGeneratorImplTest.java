@@ -5,19 +5,21 @@ import org.junit.Test;
 import tppagrupo7.xpress.util.NotAnnotatedClass;
 import tppagrupo7.xpress.util.Usuario;
 
+import java.util.List;
+
 public class SQLGeneratorImplTest {
 
     private SQLGeneratorImpl generator = new SQLGeneratorImpl();
 
     @Test
     public void selectByIdTest_success(){
-        Assert.assertEquals("SELECT * FROM Usuario WHERE id = 12;",generator.selectById(Usuario.class,12));
+        Assert.assertEquals("SELECT * FROM Usuario WHERE id = 12;".toUpperCase(),generator.selectById(Usuario.class,12).getQuery());
     }
 
     @Test
     public void selectAllTest_success(){
-        Assert.assertEquals("SELECT * FROM Usuario;",generator.selectAll(Usuario.class));
-        Assert.assertEquals("SELECT * FROM NotAnnotatedClass;",generator.selectAll(NotAnnotatedClass.class));
+        Assert.assertEquals("SELECT * FROM Usuario;".toUpperCase(),generator.selectAll(Usuario.class).getQuery());
+        Assert.assertEquals("SELECT * FROM NotAnnotatedClass;".toUpperCase(),generator.selectAll(NotAnnotatedClass.class).getQuery());
     }
 
     @Test
@@ -29,14 +31,5 @@ public class SQLGeneratorImplTest {
             Assert.assertEquals("Cannot find id field in class NotAnnotatedClass.",e.getMessage());
         }
     }
-    
-    public static void main(){
-    	//recuperar 1 usuario
-    	Usuario usr = Xpress.find(Usuario.class,1);
-    	
-    	//recuperar varios usuarios
-    	List<Usuario> usr_lst = Xpress.findAll(Usuario.class);
-    	
-    	
-    }
+
 }

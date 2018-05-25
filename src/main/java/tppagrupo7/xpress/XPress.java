@@ -11,7 +11,7 @@ public class XPress {
     private static SQLExecutor executor;
 
     public static <T> T find(Class<T> clazz, Object id){
-        return executor.execute(generator.selectById(clazz,id));
+        return executor.executeForSingleRow(generator.selectById(clazz,id));
     }
 
     public static <T> List<T> findAll(Class<T> clazz){

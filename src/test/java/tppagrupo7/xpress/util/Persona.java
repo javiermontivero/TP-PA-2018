@@ -4,6 +4,8 @@ import tppagrupo7.xpress.annotation.Column;
 import tppagrupo7.xpress.annotation.Id;
 import tppagrupo7.xpress.annotation.Table;
 
+import java.time.LocalDate;
+
 @Table(name = "PERSONA")
 public class Persona {
     @Id(strategy = Id.IDENTITY)
@@ -17,7 +19,7 @@ public class Persona {
     private String direccion;
     
     @Column
-    private Date fechaAlta;
+    private LocalDate fechaAlta;
     
     public Persona(){
     }

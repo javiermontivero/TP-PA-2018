@@ -1,6 +1,8 @@
 package tppagrupo7.xpress.generator;
 
+import tppagrupo7.xpress.domain.Statement;
+
 public interface SQLGenerator {
-    <T> String selectById(Class<T> clazz, int id);
-    <T> String selectAll(Class<T> usuarioClass);
+    <T> Statement<T> selectById(Class<T> clazz, Object id);
+    <T> Statement<T> selectAll(Class<T> usuarioClass);
 }

@@ -2,6 +2,7 @@ package tppagrupo7.xpress.util;
 
 import tppagrupo7.xpress.annotation.Column;
 import tppagrupo7.xpress.annotation.Id;
+import tppagrupo7.xpress.annotation.OneToMany;
 import tppagrupo7.xpress.annotation.Table;
 
 @Table(name = "ROL_APLICACION")
@@ -10,10 +11,10 @@ public class RolAplicacion {
     @Column
     private int idRolAplicacion;
     
-    @OneToMany
+    @OneToMany(mappedBy = "rol")
     private Rol rol;
     
-    @OneToMany
+    @OneToMany(mappedBy = "aplicacion")
     private Aplicacion aplicacion;
     
     public RolAplicacion(){

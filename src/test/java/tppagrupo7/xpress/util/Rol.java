@@ -2,7 +2,10 @@ package tppagrupo7.xpress.util;
 
 import tppagrupo7.xpress.annotation.Column;
 import tppagrupo7.xpress.annotation.Id;
+import tppagrupo7.xpress.annotation.OneToMany;
 import tppagrupo7.xpress.annotation.Table;
+
+import java.util.List;
 
 @Table(name = "ROL")
 public class Rol {
