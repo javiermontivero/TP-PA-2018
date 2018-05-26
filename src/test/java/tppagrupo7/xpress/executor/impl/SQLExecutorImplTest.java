@@ -7,12 +7,13 @@ import tppagrupo7.xpress.util.UsuarioSinReferencias;
 import static org.junit.Assert.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 public class SQLExecutorImplTest extends TestSuiteWithDBAccess {
 
     private SQLExecutorImpl executor = new SQLExecutorImpl(getConnection());
     @Test
-    public void findByIdTest_OK() {
+    public void executeForSingleRow_OK() {
         Query<UsuarioSinReferencias> query = new Query<>();
         query.setQuery("SELECT * FROM USUARIO WHERE id = 5;");
         query.setExpectedType(UsuarioSinReferencias.class);
@@ -23,6 +24,19 @@ public class SQLExecutorImplTest extends TestSuiteWithDBAccess {
         assertEquals("12345",user.getPassword());
     }
 
+    @Test
+    public void execute_OK(){
+        Query<UsuarioSinReferencias> query = new Query<>();
+        query.setQuery("SELECT * FROM USUARIO;");
+        query.setExpectedType(UsuarioSinReferencias.class);
+        List<UsuarioSinReferencias> users = executor.execute(query);
+
+        assertEquals(3,users.size());
+        assertEquals("javi",users.get(0).getUsername());
+        assertEquals("fede",users.get(1).getUsername());
+        assertEquals("jorge",users.get(2).getUsername());
+
+    }
 
     @BeforeClass
     public static void createTables() throws SQLException {
