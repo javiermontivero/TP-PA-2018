@@ -5,12 +5,24 @@ import tppagrupo7.xpress.domain.Query;
 import tppagrupo7.xpress.util.TestSuiteWithDBAccess;
 import tppagrupo7.xpress.util.UsuarioSinReferencias;
 import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.sql.SQLException;
 
-
 public class SQLExecutorImplTest extends TestSuiteWithDBAccess {
+
+    private SQLExecutorImpl executor = new SQLExecutorImpl(getConnection());
+    @Test
+    public void findByIdTest_OK() {
+        Query<UsuarioSinReferencias> query = new Query<>();
+        query.setQuery("SELECT * FROM USUARIO WHERE id = 5;");
+        query.setExpectedType(UsuarioSinReferencias.class);
+        UsuarioSinReferencias user = executor.executeForSingleRow(query);
+
+        assertEquals(5,user.getId());
+        assertEquals("javi",user.getUsername());
+        assertEquals("12345",user.getPassword());
+    }
+
 
     @BeforeClass
     public static void createTables() throws SQLException {
@@ -27,17 +39,4 @@ public class SQLExecutorImplTest extends TestSuiteWithDBAccess {
     public static void drop() throws SQLException, IOException, ClassNotFoundException {
         destroy();
     }
-    private SQLExecutorImpl executor = new SQLExecutorImpl(getConnection());
-    @Test
-    public void test() {
-        Query<UsuarioSinReferencias> query = new Query<>();
-        query.setQuery("SELECT * FROM USUARIO WHERE id = 5;");
-        query.setExpectedType(UsuarioSinReferencias.class);
-        UsuarioSinReferencias user = executor.executeForSingleRow(query);
-
-        assertEquals(5,user.getId());
-        assertEquals("javi",user.getUsername());
-        assertEquals("12345",user.getPassword());
-    }
-
 }

@@ -27,18 +27,19 @@ public class SQLExecutorImpl implements SQLExecutor {
 
     @Override
     public <T> T executeForSingleRow(Query<T> sentence) {
-        T object;
+        T object = null;
         try(java.sql.Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery(sentence.getQuery());rs.next();
             Constructor<T> constructor = sentence.getExpectedType().getConstructor();
             object = constructor.newInstance();
+            T finalObject = object;
             Lists.newArrayList(sentence.getExpectedType().getMethods()).stream().
                     filter(method -> method.getName().contains("set")).
                     forEach(setter -> {
                         String fieldName = setter.getName().split("set")[1].toLowerCase();
                         try {
                             Field field = sentence.getExpectedType().getDeclaredField(fieldName);
-                            setter.invoke(object, rs.getObject(fieldName, field.getType()));
+                            setter.invoke(finalObject, rs.getObject(fieldName, field.getType()));
                         } catch (NoSuchFieldException e) {
                             throw new RuntimeException("No field " + fieldName + " defined.", e);
                         } catch (SQLException e) {
@@ -47,12 +48,9 @@ public class SQLExecutorImpl implements SQLExecutor {
                             throw new RuntimeException("No appropiate setter defined for field " + fieldName + ".", e);
                         }
                     });
-            return object;
-        } catch (IllegalAccessException | InstantiationException | SQLException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException | InvocationTargetException e){
+        } catch (IllegalAccessException | InstantiationException | SQLException | NoSuchMethodException | InvocationTargetException e){
             throw new RuntimeException("No empty constructor defined " + sentence.getExpectedType().getSimpleName() + ".");
         }
-        return null;
+        return object;
     }
 }
