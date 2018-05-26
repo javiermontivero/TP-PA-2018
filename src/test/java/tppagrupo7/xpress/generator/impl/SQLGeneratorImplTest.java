@@ -1,11 +1,11 @@
 package tppagrupo7.xpress.generator.impl;
 
-import org.junit.Assert;
 import org.junit.Test;
+import tppagrupo7.xpress.domain.Query;
 import tppagrupo7.xpress.util.NotAnnotatedClass;
 import tppagrupo7.xpress.util.Usuario;
 
-import java.util.List;
+import static org.junit.Assert.*;
 
 public class SQLGeneratorImplTest {
 
@@ -13,22 +13,28 @@ public class SQLGeneratorImplTest {
 
     @Test
     public void selectByIdTest_success(){
-        Assert.assertEquals("SELECT * FROM Usuario WHERE id = 12;".toUpperCase(),generator.selectById(Usuario.class,12).getQuery());
+        Query<Usuario> usuarioQuery = generator.selectById(Usuario.class, 12);
+        assertEquals("SELECT * FROM Usuario WHERE id = 12;".toUpperCase(), usuarioQuery.getQuery());
+        assertEquals(Usuario.class, usuarioQuery.getExpectedType());
     }
 
     @Test
     public void selectAllTest_success(){
-        Assert.assertEquals("SELECT * FROM Usuario;".toUpperCase(),generator.selectAll(Usuario.class).getQuery());
-        Assert.assertEquals("SELECT * FROM NotAnnotatedClass;".toUpperCase(),generator.selectAll(NotAnnotatedClass.class).getQuery());
+        Query<Usuario> userQuery = generator.selectAll(Usuario.class);
+        assertEquals("SELECT * FROM Usuario;".toUpperCase(), userQuery.getQuery());
+        assertEquals(Usuario.class, userQuery.getExpectedType());
+        Query<NotAnnotatedClass> query = generator.selectAll(NotAnnotatedClass.class);
+        assertEquals("SELECT * FROM NotAnnotatedClass;".toUpperCase(), query.getQuery());
+        assertEquals(NotAnnotatedClass.class, query.getExpectedType());
     }
 
     @Test
     public void selectByIdTest_fail_noId(){
         try{
             generator.selectById(NotAnnotatedClass.class,12);
-            Assert.fail();
+            fail();
         }catch (RuntimeException e){
-            Assert.assertEquals("Cannot find id field in class NotAnnotatedClass.",e.getMessage());
+            assertEquals("Cannot find id field in class NotAnnotatedClass.",e.getMessage());
         }
     }
 

@@ -8,19 +8,19 @@ import java.util.List;
 @Table(name = "USUARIO")
 public class Usuario {
     @Id(strategy = Id.IDENTITY)
-    @Column
+    @Column(name="id")
     private int id;
     
-    @Column
+    @Column(name="username")
     private String username;
     
-    @Column
+    @Column(name="password")
     private String password;
     
     @ManyToOne
     private Persona persona;
     
-    @OneToMany(mappedBy="USUARIO")
+    @OneToMany(mappedBy="ID_USUARIO")
     private List<UsuarioRol> roles;
     
     public Usuario(){

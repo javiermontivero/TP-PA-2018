@@ -1,6 +1,6 @@
 package tppagrupo7.xpress.domain;
 
-public class Statement<T> {
+public class Query<T> {
     private Class<T> expectedType;
 
     private String query;

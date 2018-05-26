@@ -1,14 +1,21 @@
 package tppagrupo7.xpress;
 
 import tppagrupo7.xpress.executor.SQLExecutor;
+import tppagrupo7.xpress.executor.impl.SQLExecutorImpl;
 import tppagrupo7.xpress.generator.SQLGenerator;
+import tppagrupo7.xpress.generator.impl.SQLGeneratorImpl;
+import tppagrupo7.xpress.util.ConnectionManager;
 
 import java.util.List;
 
 public class XPress {
 
-    private static SQLGenerator generator;
-    private static SQLExecutor executor;
+    private static ConnectionManager manager = new ConnectionManager();
+    private static SQLGenerator generator = new SQLGeneratorImpl();
+    private static SQLExecutor executor = new SQLExecutorImpl(manager.getConnection());
+
+
+
 
     public static <T> T find(Class<T> clazz, Object id){
         return executor.executeForSingleRow(generator.selectById(clazz,id));

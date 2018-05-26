@@ -7,6 +7,13 @@ public class Configuration {
     private String user;
     private String password;
 
+    public Configuration(String url, String driver, String user, String password) {
+        this.url = url;
+        this.driver = driver;
+        this.user = user;
+        this.password = password;
+    }
+
     public String getUrl() {
         return url;
     }

@@ -1,50 +1,43 @@
 package tppagrupo7.xpress.executor.impl;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import tppagrupo7.xpress.XPress;
+import org.junit.*;
+import tppagrupo7.xpress.domain.Query;
 import tppagrupo7.xpress.util.TestSuiteWithDBAccess;
+import tppagrupo7.xpress.util.UsuarioSinReferencias;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.SQLException;
+
 
 public class SQLExecutorImplTest extends TestSuiteWithDBAccess {
 
-
     @BeforeClass
-    public static void init() throws SQLException, ClassNotFoundException, IOException {
-        Class.forName("org.hsqldb.jdbc.JDBCDriver");
-        initDatabase();
+    public static void createTables() throws SQLException {
+        createTable("CREATE TABLE USUARIO " +
+                "(id INT PRIMARY KEY," +
+                "username VARCHAR(20) NOT NULL," +
+                "password VARCHAR(20) NOT NULL);");
+        insertRows("INSERT INTO USUARIO(id,username,password) VALUES (5,'javi','12345')");
+        insertRows("INSERT INTO USUARIO(id,username,password) VALUES (7,'fede','54321')");
+        insertRows("INSERT INTO USUARIO(id,username,password) VALUES (9,'jorge','22577')");
     }
 
     @AfterClass
-    public static void destroy() throws SQLException, ClassNotFoundException, IOException {
-        try (Connection connection = getConnection(); Statement statement = connection.createStatement();) {
-            statement.executeUpdate("DROP TABLE employee");
-            connection.commit();
-        }
+    public static void drop() throws SQLException, IOException, ClassNotFoundException {
+        destroy();
     }
-
-    private static void initDatabase() throws SQLException {
-        try (Connection connection = getConnection(); Statement statement = connection.createStatement();) {
-            statement.execute("CREATE TABLE employee (id INT NOT NULL, name VARCHAR(50) NOT NULL,"
-                            + "email VARCHAR(50) NOT NULL, PRIMARY KEY (id))");
-            connection.commit();
-            statement.executeUpdate(
-                    "INSERT INTO employee VALUES (1001,'Vinod Kumar Kashyap', 'vinod@javacodegeeks.com')");
-            statement.executeUpdate("INSERT INTO employee VALUES (1002,'Dhwani Kashyap', 'dhwani@javacodegeeks.com')");
-            statement.executeUpdate("INSERT INTO employee VALUES (1003,'Asmi Kashyap', 'asmi@javacodegeeks.com')");
-            connection.commit();
-        }
-    }
-    private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:hsqldb:mem:employees", "vinod", "vinod");
-    }
-
+    private SQLExecutorImpl executor = new SQLExecutorImpl(getConnection());
     @Test
-    public void test() throws SQLException {
+    public void test() {
+        Query<UsuarioSinReferencias> query = new Query<>();
+        query.setQuery("SELECT * FROM USUARIO WHERE id = 5;");
+        query.setExpectedType(UsuarioSinReferencias.class);
+        UsuarioSinReferencias user = executor.executeForSingleRow(query);
 
+        assertEquals(5,user.getId());
+        assertEquals("javi",user.getUsername());
+        assertEquals("12345",user.getPassword());
     }
 
 }

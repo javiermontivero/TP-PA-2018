@@ -11,6 +11,6 @@ public @interface Column {
 	int LAZY=1;
 	int EAGER=2;
 	
-	String name() default "";
+	String name();
 	int fetchType() default EAGER;
 }
