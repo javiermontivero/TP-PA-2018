@@ -7,6 +7,7 @@ import tppagrupo7.xpress.generator.impl.SQLGeneratorImpl;
 import tppagrupo7.xpress.util.ConnectionManager;
 
 import java.util.List;
+import java.util.Optional;
 
 public class XPress {
 
@@ -18,7 +19,11 @@ public class XPress {
 
 
     public static <T> T find(Class<T> clazz, Object id){
-        return executor.executeForSingleRow(generator.selectById(clazz,id));
+        Optional<T> t = executor.executeForSingleRow(generator.selectById(clazz, id));
+        if(t.isPresent())
+            return t.get();
+        else
+            throw new RuntimeException("No element with id " + id.toString());
     }
 
     public static <T> List<T> findAll(Class<T> clazz){

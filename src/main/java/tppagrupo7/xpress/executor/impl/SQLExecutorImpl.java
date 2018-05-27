@@ -1,8 +1,11 @@
 package tppagrupo7.xpress.executor.impl;
 
 import com.google.common.collect.Lists;
+import tppagrupo7.xpress.annotation.Column;
+import tppagrupo7.xpress.domain.Mapping;
 import tppagrupo7.xpress.domain.Query;
 import tppagrupo7.xpress.executor.SQLExecutor;
+import tppagrupo7.xpress.util.Mappings;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -45,18 +48,21 @@ public class SQLExecutorImpl implements SQLExecutor {
     }
 
     @Override
-    public <T> T executeForSingleRow(Query<T> sentence) {
-        T object = null;
+    public <T> Optional<T> executeForSingleRow(Query<T> sentence) {
         try(Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery(sentence.getQuery());rs.next();
+            ResultSet rs = statement.executeQuery(sentence.getQuery());
+            if(!rs.next())
+                return Optional.empty();
             Constructor<T> constructor = sentence.getExpectedType().getConstructor();
-            object = constructor.newInstance();
-            T finalObject = object;
-            buildObject(sentence.getExpectedType().getMethods(), setProperty(sentence, rs, finalObject));
+            T object = constructor.newInstance();
+            List<Mapping<T>> mappings = Mappings.getAllMappings(sentence.getExpectedType());
+            T ret = mappings.stream().reduce(object,(obj, mapping) -> mapping.addMappedProperty(obj,rs),(a,b) -> b);
+            return Optional.of(ret);
         } catch (IllegalAccessException | InstantiationException | SQLException | NoSuchMethodException | InvocationTargetException e){
             throw new RuntimeException("No empty constructor defined " + sentence.getExpectedType().getSimpleName() + ".");
         }
-        return object;
+
+
     }
 
     private void buildObject(Method[] methods, Consumer<Method> methodConsumer) {
@@ -70,7 +76,8 @@ public class SQLExecutorImpl implements SQLExecutor {
             String fieldName = setter.getName().split("set")[1].toLowerCase();
             try {
                 Field field = sentence.getExpectedType().getDeclaredField(fieldName);
-                setter.invoke(finalObject, rs.getObject(fieldName, field.getType()));
+                String columnName = field.getAnnotation(Column.class).name();
+                setter.invoke(finalObject, rs.getObject(columnName, field.getType()));
             } catch (NoSuchFieldException e) {
                 throw new RuntimeException("No field " + fieldName + " defined.", e);
             } catch (SQLException e) {
