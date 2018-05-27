@@ -1,8 +1,12 @@
 package tppagrupo7.xpress.util;
 
 import tppagrupo7.xpress.annotation.Column;
+import tppagrupo7.xpress.annotation.Id;
+import tppagrupo7.xpress.annotation.Table;
 
+@Table(name = "PERSONA")
 public class Persona {
+    @Id(strategy = Id.IDENTITY)
     @Column(name = "id")
     private int id;
 

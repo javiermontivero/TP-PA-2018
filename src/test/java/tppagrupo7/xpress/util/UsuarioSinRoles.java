@@ -3,7 +3,7 @@ package tppagrupo7.xpress.util;
 import tppagrupo7.xpress.annotation.*;
 
 
-@Table(name = "SIMPLE_USUARIO")
+@Table(name = "USUARIO")
 public class UsuarioSinRoles {
     @Id(strategy = Id.IDENTITY)
     @Column(name="id")

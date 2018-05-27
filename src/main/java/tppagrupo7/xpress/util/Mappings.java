@@ -6,6 +6,7 @@ import tppagrupo7.xpress.annotation.Column;
 import tppagrupo7.xpress.annotation.ManyToOne;
 import tppagrupo7.xpress.annotation.OneToMany;
 import tppagrupo7.xpress.domain.ColumnMapping;
+import tppagrupo7.xpress.domain.ManyToOneMapping;
 import tppagrupo7.xpress.domain.Mapping;
 
 import java.lang.reflect.Method;
@@ -27,7 +28,7 @@ public class Mappings {
                                 return new ColumnMapping<T>(type, field, columnName, setter);
                             }
                             if (field.getAnnotation(ManyToOne.class) != null) {
-                                throw new UnsupportedOperationException("@ManyToOne not supported.");//return new ManyToOneMapping<T>(field, type);
+                                throw new UnsupportedOperationException("@ManyToOne not supported.");
                             }
                             if (field.getAnnotation(OneToMany.class) != null) {
                                 throw new UnsupportedOperationException("@OneToMany not supported");//return new OneToManyMapping<T>(field, type);
@@ -35,7 +36,7 @@ public class Mappings {
                         } catch (NoSuchMethodException e){
                             throw new RuntimeException("Can't find setter method for field " + field.getName());
                         }
-                        throw new RuntimeException("SHIT HAPPENED.");
+                        throw new RuntimeException("You should not have come here.");
                     }).collect(Collectors.toList());
-    };
+    }
 }
